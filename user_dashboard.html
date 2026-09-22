@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>GenBank | Retail Customer Dashboard</title>
+    <style>
+        :root {
+            --navy: #003366;
+            --saffron: #FF9933;
+            --gray-bg: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+        * { margin:0; padding:0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f1f3f6; }
+        
+        /* Navbar Framework */
+        .navbar { background-color: var(--navy); color: #fff; padding: 12px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--saffron); }
+        .nav-brand { font-size: 20px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .nav-brand span { background: var(--saffron); color: var(--navy); padding: 4px 10px; border-radius: 4px; }
+        .user-pill { display: flex; align-items: center; gap: 15px; }
+        .logout-link { color: #fff; text-decoration: none; border: 1px solid #fff; padding: 6px 14px; border-radius: 4px; font-size: 13px; font-weight: bold; transition: 0.3s; }
+        .logout-link:hover { background-color: #fff; color: var(--navy); }
+
+        /* App Work Station Split Layout */
+        .workspace { display: flex; max-width: 1300px; margin: 30px auto; padding: 0 20px; gap: 25px; }
+        
+        /* Balance Profile Highlight Card */
+        .sidebar { flex: 1; background: #fff; border-radius: 8px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.03); overflow: hidden; height: fit-content; }
+        .sidebar-header { background: linear-gradient(135deg, var(--navy), #002244); color: white; padding: 25px; text-align: center; }
+        .sidebar-header h2 { font-size: 22px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .sidebar-header p { font-size: 12px; color: #a9c6e2; font-weight: 500; }
+        .profile-list { padding: 20px; list-style: none; }
+        .profile-list li { padding: 12px 0; border-bottom: 1px solid #f1f3f6; display: flex; justify-content: space-between; font-size: 14px; }
+        .profile-list li strong { color: #555; font-weight: 600; }
+        .profile-list li span { color: #111; font-weight: bold; }
+
+        .main-content { flex: 2.5; display: flex; flex-direction: column; gap: 25px; }
+        
+        /* Balance Summary Widget Box */
+        .balance-strip { background: linear-gradient(to right, #ffffff, #eaf2f8); border-radius: 8px; border: 1px solid var(--border-color); padding: 25px; display: flex; justify-content: space-between; align-items: center; }
+        .bal-title { font-size: 13px; color: #666; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+        .bal-amt { font-size: 32px; font-weight: 800; color: #1e4620; margin-top: 5px; }
+        .acc-tag { background: #e2f0d9; color: #385723; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 12px; }
+
+        /* Banking Operations Dashboard Panels */
+        .card { background: #fff; border-radius: 8px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
+        .card-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); background-color: #fafbfc; color: var(--navy); font-weight: bold; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card-body { padding: 25px; }
+
+        /* Interactive Simulation Grids */
+        .ops-grid { display: flex; gap: 15px; }
+        .ops-input { flex: 1; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
+        .ops-btn { padding: 10px 20px; background-color: var(--navy); color: white; border: none; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        .ops-btn:hover { background-color: #002244; }
+
+        /* Transaction Log Layout Table */
+        .tx-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .tx-table th, .tx-table td { text-align: left; padding: 12px; border-bottom: 1px solid #dee2e6; font-size: 14px; }
+        .tx-table th { background-color: #f4f6f9; color: #555; font-weight: 600; }
+        .tx-cr { color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="nav-brand"><span>GB</span> GenBank Retail</div>
+    <div class="user-pill">
+        <span style="font-size:14px; font-weight: 500;">Welcome, <span th:text="${user.fullName}" style="font-weight:bold; color:var(--saffron);">Customer</span></span>
+        <a href="/logout" class="logout-link">Secure Logout</a>
+    </div>
+</div>
+
+<div class="workspace">
+    <!-- Account Information Section -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2 th:text="${user.fullName}">Customer Name</h2>
+            <p>Digital Savings Profile</p>
+        </div>
+        <ul class="profile-list">
+            <li><strong>Account Number</strong><span th:text="${user.accountNumber}">GB00000</span></li>
+            <li><strong>Email ID</strong><span th:text="${user.email}">user@domain.com</span></li>
+            <li><strong>Registered Phone</strong><span th:text="${user.phone}">+91 00000</span></li>
+            <li><strong>KYC Classification</strong><span style="color:#28a745; font-weight:bold;">COMPLIANT</span></li>
+            <li><strong>Branch Portal</strong><span>MUMBAI MAIN HUB</span></li>
+        </ul>
+    </div>
+
+    <!-- Active Real-Time Financial Ledger Section -->
+    <div class="main-content">
+        <div class="balance-strip">
+            <div>
+                <div class="bal-title">Available Cleared Balance (INR)</div>
+                <div class="bal-amt">₹ <span th:text="${user.balance}">1000.00</span></div>
+            </div>
+            <div class="acc-tag">Active Account Status</div>
+        </div>
+
+        <!-- Funds Transfer Operations Panel -->
+        <div class="card">
+            <div class="card-header">Instant Money Transfer Platform (IMPS / NEFT)</div>
+            <div class="card-body">
+                <div class="ops-grid">
+                    <input type="text" class="ops-input" placeholder="Beneficiary Account Number">
+                    <input type="text" class="ops-input" placeholder="IFSC Code (e.g., GBIN000104)">
+                    <input type="number" class="ops-input" placeholder="Amount (₹)">
+                    <button class="ops-btn" onclick="alert('Transaction simulator active: Funds routing requested.')">Initiate Pay</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mini Statement Transaction Ledger -->
+        <div class="card">
+            <div class="card-header">Recent Core Clearing Passbook Entries</div>
+            <div class="card-body" style="padding:15px;">
+                <table class="tx-table">
+                    <thead>
+                        <tr>
+                            <th>Transaction Timestamp</th>
+                            <th>Reference ID / Narration</th>
+                            <th>Type</th>
+                            <th>Amount (INR)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>16-Jul-2026</td>
+                            <td>SYSTEM/Initial Digital Account Activation Reward</td>
+                            <td class="tx-cr">CR</td>
+                            <td class="tx-cr">₹ <span th:text="${user.balance}">1000.00</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

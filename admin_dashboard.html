@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>GenBank Core Platform | Operational CBS Terminal</title>
+    <style>
+        :root {
+            --slate-grey: #212529;
+            --steel-blue: #003366;
+            --saffron: #FF9933;
+            --white: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Consolas, sans-serif; }
+        body { background-color: #eef2f5; color: #212529; }
+        
+        .cbs-header { background-color: var(--slate-grey); color: var(--white); padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--steel-blue); }
+        .cbs-title { font-weight: 800; font-size: 18px; letter-spacing: 1px; display: flex; align-items: center; gap: 12px; }
+        .status-pulse { width: 10px; height: 10px; background-color: #28a745; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #28a745; }
+        .btn-exit { color: #fff; text-decoration: none; padding: 6px 15px; border: 1px solid #dc3545; background-color: #dc3545; font-size: 13px; font-weight: bold; border-radius: 4px; }
+        .btn-exit:hover { background-color: #c82333; }
+
+        .dashboard-layout { max-width: 1300px; margin: 30px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 25px; }
+        
+        /* Summary Metric Badges */
+        .metrics-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .metric-tile { background: var(--white); padding: 20px; border-radius: 6px; border: 1px solid #ced4da; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .metric-title { font-size: 11px; font-weight: bold; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px; }
+        .metric-value { font-size: 24px; font-weight: 700; color: var(--steel-blue); margin-top: 5px; }
+
+        .panel { background: var(--white); border-radius: 6px; border: 1px solid #ced4da; }
+        .panel-heading { background-color: #f8f9fa; padding: 15px 20px; font-weight: bold; font-size: 14px; border-bottom: 1px solid #ced4da; color: var(--steel-blue); letter-spacing: 0.5px; text-transform: uppercase; }
+        .panel-body { padding: 20px; }
+
+        .log-display { background: #1e1e1e; color: #a9f3a9; padding: 20px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 13px; max-height: 250px; overflow-y: auto; line-height: 1.6; border: 2px solid #333; }
+    </style>
+</head>
+<body>
+
+<div class="cbs-header">
+    <div class="cbs-title">
+        <span class="status-pulse"></span>
+        GENBANK CENTRAL BANKING SYSTEM (CBS Core Terminal v7.4)
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <span style="font-size:13px; font-weight:bold;">Operator ID: <span th:text="${admin.username}" style="color:var(--saffron);">ADMIN</span></span>
+        <a href="/logout" class="btn-exit">Terminate Session</a>
+    </div>
+</div>
+
+<div class="dashboard-layout">
+    <!-- Top KPIs -->
+    <div class="metrics-bar">
+        <div class="metric-tile">
+            <div class="metric-title">Authenticated Identity</div>
+            <div class="metric-value" th:text="${admin.username}">ADMIN</div>
+        </div>
+        <div class="metric-tile">
+            <div class="metric-title">Terminal Node Group</div>
+            <div class="metric-value">ZONE-IN-WEST</div>
+        </div>
+        <div class="metric-tile">
+            <div class="metric-title">FastAPI Microservice Connection</div>
+            <div class="metric-value" style="color: green;">SECURE (8000)</div>
+        </div>
+        <div class="metric-tile">
+            <div class="metric-title">Internal Security Status</div>
+            <div class="metric-value" style="color: #FF9933;">CLEAR</div>
+        </div>
+    </div>
+
+    <!-- Administrative Controls Panel -->
+    <div class="panel">
+        <div class="panel-heading">System Profile Configuration Details</div>
+        <div class="panel-body">
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding:12px; font-weight:bold; color:#555; width:250px;">Admin Account Email Binding</td>
+                    <td style="padding:12px; font-weight:bold;" th:text="${admin.email}">admin@genbank.com</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding:12px; font-weight:bold; color:#555;">System Authority Clearance</td>
+                    <td style="padding:12px; color:red; font-weight:bold;">LEVEL-1 MASTER CLEARANCE</td>
+                </tr>
+                <tr>
+                    <td style="padding:12px; font-weight:bold; color:#555;">Database Entity Connection Mapping</td>
+                    <td style="padding:12px; font-family: monospace;">apnabank.admins (Entity ID: <span th:text="${admin.id}">1</span>)</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- System Diagnostic Terminal Trace Log -->
+    <div class="panel">
+        <div class="panel-heading">Real-Time Core Thread Auditing Stream</div>
+        <div class="panel-body">
+            <div class="log-display">
+                [INFO] 2026-07-16T01:07:21.014Z - Initializing thread context pool framework mapping hooks...<br>
+                [INFO] 2026-07-16T01:07:21.055Z - Isolated Hikari connection pool allocated to local schema instance: 'apnabank'.<br>
+                [INFO] 2026-07-16T01:07:21.090Z - Dialect verification resolved strategy to: org.hibernate.dialect.MySQLDialect.<br>
+                [SUCCESS] 2026-07-16T01:07:22.140Z - Admin account credentials confirmed. Session context mapped onto variable 'adminUser'.
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
